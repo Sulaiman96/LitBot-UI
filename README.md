@@ -1,54 +1,54 @@
-# React + TypeScript + Vite
+# LitBot UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**LitBot** is an AI-powered research assistant designed to help researchers focus on thinking, not searching. This is the official frontend for the LitBot landing page, built with modern web technologies to create an immersive, scroll-based experience for early adopters and future users.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Project Overview
 
-## Expanding the ESLint configuration
+- Full-screen video background with a sleek dark UI
+- Snap-scrolling between page sections (Hero, About, Product, Pricing)
+- Early access form (name, email, profession) that submits to email
+- Clean and responsive layout with subtle animations
+- Tech stack: React + TypeScript + Tailwind CSS + Framer Motion + Vite
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+## 📦 Technologies Used
+
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [EmailJS](https://www.emailjs.com/) _(for form submissions)_
+
+---
+
+## 🛠️ Local Setup
+
+Follow these steps to get the project running on your local machine:
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Sulaiman96/LitBot-UI.git
+cd LitBot-UI
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+npm install
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+### 3. Start the Dev Server
+
+npm run dev
+Visit http://localhost:5173 (This can be different, keep an eye on your console) in your browser to see the app running.
+
+### 👥 Contributing
+
+This is currently a closed project in early development. If you'd like to contribute or collaborate, feel free to open an issue or contact us.
+
+### 📄 License
+
+To be added Later
