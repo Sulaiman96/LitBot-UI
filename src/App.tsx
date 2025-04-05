@@ -1,12 +1,10 @@
-import "./App.css";
+import HeroSection from "./components/sections/HeroSection";
 
 function App() {
   return (
-    <div className="h-screen bg-black text-white">
-      <h1 className="text-center text-4xl font-bold pt-20">
-        LitBot Landing Page
-      </h1>
-    </div>
+    <main className="scroll-smooth scroll-snap-y snap-mandatory h-screen overflow-y-scroll">
+      <HeroSection />
+    </main>
   );
 }
 
