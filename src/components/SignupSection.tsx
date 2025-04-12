@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { submitToWaitList } from "@/services/waitlistService";
 
 const SignupSection = () => {
   const { toast } = useToast();
@@ -17,28 +18,32 @@ const SignupSection = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      await submitToWaitList(formData);
+
       toast({
         title: "Thanks for joining our waitlist!",
-        description: "We'll notify you when LitBot is ready for early access.",
+        description: "You'll be the first to know when LitBot is ready.",
       });
 
-      setFormData({
-        name: "",
-        email: "",
-        profession: "",
+      setFormData({ name: "", email: "", profession: "" });
+    } catch (error: any) {
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Please try again later.",
+        variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
-    <section id="signup" className="section bg-white py-24">
+    <section id="signup" className="section bg-white py-16">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12 fade-in-section">
@@ -114,7 +119,6 @@ const SignupSection = () => {
                   <option value="academic_researcher">
                     Academic Researcher
                   </option>
-                  <option value="professor">Professor</option>
                   <option value="phd_student">PhD Student</option>
                   <option value="masters_student">Master's Student</option>
                   <option value="undergraduate">Undergraduate Student</option>
@@ -129,10 +133,10 @@ const SignupSection = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="litbot-button w-full flex justify-center items-center"
+                  className="bg-litbot-navy hover:bg-litbot-darkbone hover:text-litbot-navy w-full flex justify-center items-center text-litbot-bone font-medium py-3"
                 >
                   {isSubmitting ? (
-                    <div className="h-5 w-5 rounded-full border-t-2 border-b-2 border-litbot-bone animate-spin"></div>
+                    <div className="h-5 w-5 rounded-full border-t-2 border-b-2 border-litbot-navy animate-spin"></div>
                   ) : (
                     "Join Waitlist"
                   )}
@@ -141,7 +145,7 @@ const SignupSection = () => {
             </form>
           </div>
 
-          <div className="mt-12 text-center text-litbot-slate fade-in-section">
+          <div className="mt-8 text-center text-litbot-slate fade-in-section">
             <p>
               By joining the waitlist, you'll get updates on our development
               progress and be first in line when we launch.

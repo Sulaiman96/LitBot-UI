@@ -185,7 +185,7 @@ const AboutSection = () => {
               <p className="text-litbot-slate">
                 Guides how LitBot serves researchers by fine-tuning the model to
                 academic niches and ensuring the results meet the quality,
-                rigour and integrity scholars expect. Plays a key role in
+                rigour and integrity researchers expect. Plays a key role in
                 aligning the tool with the real needs of the research community.
               </p>
             </div>
