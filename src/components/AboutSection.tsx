@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { features } from "@/data/features";
+import Sully from "@/assets/images/team/sully.jpg";
+import Mutti from "@/assets/images/team/mutti.jpeg";
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -152,7 +154,7 @@ const AboutSection = () => {
           <div className="grid md:grid-cols-2 gap-10">
             <div className="flex flex-col items-center text-center">
               <img
-                src="src/assets/images/team/sully.jpg"
+                src={Sully}
                 alt="Mr. Sulaiman Maarij"
                 className="w-32 h-32 rounded-full object-cover border-2 border-litbot-teal/20 mb-4"
               />
@@ -172,7 +174,7 @@ const AboutSection = () => {
             </div>
             <div className="flex flex-col items-center text-center">
               <img
-                src="src/assets/images/team/mutti.jpeg"
+                src={Mutti}
                 alt="Dr. Mustafa A. Al Khafaji"
                 className="w-32 h-32 rounded-full object-cover border-2 border-litbot-teal/20 mb-4"
               />

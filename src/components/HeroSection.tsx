@@ -1,4 +1,5 @@
 import { ArrowDown } from "lucide-react";
+import heroImage from "@/assets/images/hero.png";
 
 const HeroSection = () => {
   const scrollToSection = (id: string) => {
@@ -13,8 +14,8 @@ const HeroSection = () => {
       {/* Background Image */}
       <div className="absolute inset-0 flex justify-end items-center z-0">
         <img
-          src="src/assets/images/hero.png"
-          alt=""
+          src={heroImage}
+          alt="hero img"
           className="h-full w-auto object-contain"
           aria-hidden="true"
         />

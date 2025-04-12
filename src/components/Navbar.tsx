@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import logoImage from "@/assets/images/logo.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,7 +39,7 @@ const Navbar = () => {
         <div className="flex items-center">
           <a href="/" className="flex items-center space-x-2">
             <img
-              src="src/assets/images/logo.png"
+              src={logoImage}
               alt="LitBot Logo"
               className="h-10 w-10"
             />
