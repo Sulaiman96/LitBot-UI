@@ -21,9 +21,9 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="container mx-auto h-full pt-24 pb-16 relative z-10">
-        <div className="grid md:grid-cols-2 gap-8 h-full items-center">
-          <div className="flex flex-col justify-center space-y-6 animate-fade-in">
+      <div className="container mx-auto relative z-10 flex items-center min-h-[80vh]">
+        <div className="w-full grid md:grid-cols-2 gap-8">
+          <div className="flex flex-col justify-center space-y-6 animate-fade-in h-full">
             <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl text-litbot-bone tracking-wide leading-tight">
               Meet LitBot
             </h1>
