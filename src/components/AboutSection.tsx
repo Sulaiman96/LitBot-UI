@@ -153,11 +153,17 @@ const AboutSection = () => {
           </h3>
           <div className="grid md:grid-cols-2 gap-10">
             <div className="flex flex-col items-center text-center">
-              <img
-                src={Sully}
-                alt="Mr. Sulaiman Maarij"
-                className="w-32 h-32 rounded-full object-cover border-2 border-litbot-teal/20 mb-4"
-              />
+              <a
+                href="https://www.linkedin.com/in/sulaimanmaarij"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={Sully}
+                  alt="Mr. Sulaiman Maarij"
+                  className="w-32 h-32 rounded-full object-cover border-2 border-litbot-background mb-4 hover:scale-125 transition-transform"
+                />
+              </a>
               <h4 className="text-litbot-navy text-xl font-semibold">
                 Mr. Sulaiman Maarij
               </h4>
@@ -173,11 +179,17 @@ const AboutSection = () => {
               </p>
             </div>
             <div className="flex flex-col items-center text-center">
-              <img
-                src={Mutti}
-                alt="Dr. Mustafa A. Al Khafaji"
-                className="w-32 h-32 rounded-full object-cover border-2 border-litbot-teal/20 mb-4"
-              />
+              <a
+                href="https://www.linkedin.com/in/mustafaanweralkhafaji/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={Mutti}
+                  alt="Dr. Mustafa A. Al Khafaji"
+                  className="w-32 h-32 rounded-full object-cover border-2 border-litbot-background mb-4 hover:scale-125 transition-transform"
+                />
+              </a>
               <h4 className="text-litbot-navy text-xl font-semibold">
                 Dr. Mustafa A. Al Khafaji
               </h4>
