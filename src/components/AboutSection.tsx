@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { features } from "@/data/features";
 import Sully from "@/assets/images/team/sully.jpg";
 import Mutti from "@/assets/images/team/mutti.jpeg";
+import Addy from "@/assets/images/team/addy.jpg";
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -147,12 +148,12 @@ const AboutSection = () => {
           </div>
         </div>
 
-        <div className="mt-24 max-w-4xl mx-auto fade-in-section">
+        <div className="mt-24 mx-auto px-8 fade-in-section">
           <h3 className="font-heading text-litbot-navy text-3xl tracking-wide mb-8 text-center">
             Meet Our Team
           </h3>
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="flex flex-col items-center text-center">
+          <div className="grid md:grid-cols-3 gap-x-12 gap-y-10 justify-items-center">
+            <div className="flex flex-col items-center text-center max-w-xs">
               <a
                 href="https://www.linkedin.com/in/sulaimanmaarij"
                 target="_blank"
@@ -170,15 +171,15 @@ const AboutSection = () => {
               <p className="text-litbot-slate/80 text-sm mb-3">
                 Co-founder & AI Solution Architect
               </p>
-              <p className="text-litbot-slate">
-                Leads the architecture and development of LitBot, designing the
+              <p className="text-litbot-slate text-sm leading-relaxed">
+                Leads the architecture and development of LitBot. Designing the
                 AI solution, building the platform, enabling APIs and
                 contributing to model training. With a strong background in
                 software engineering, focuses on transforming complex systems
                 into seamless tools for researchers.
               </p>
             </div>
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center max-w-xs">
               <a
                 href="https://www.linkedin.com/in/mustafaanweralkhafaji/"
                 target="_blank"
@@ -194,13 +195,37 @@ const AboutSection = () => {
                 Dr. Mustafa A. Al Khafaji
               </h4>
               <p className="text-litbot-slate/80 text-sm mb-3">
-                Co-founder & Academic Research Advisor
+                Co-founder & Research Advisor
               </p>
-              <p className="text-litbot-slate">
+              <p className="text-litbot-slate text-sm leading-relaxed">
                 Guides how LitBot serves researchers by fine-tuning the model to
                 academic niches and ensuring the results meet the quality,
                 rigour and integrity researchers expect. Plays a key role in
                 aligning the tool with the real needs of the research community.
+              </p>
+            </div>
+            <div className="flex flex-col items-center text-center max-w-xs">
+              <a
+                  href="https://www.linkedin.com/in/adamabu/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+              >
+                <img
+                    src={Addy}
+                    alt="Mr. Sulaiman Maarij"
+                    className="w-32 h-32 rounded-full object-cover border-2 border-litbot-background mb-4 hover:scale-125 transition-transform"
+                />
+              </a>
+              <h4 className="text-litbot-navy text-xl font-semibold">
+                Mr. Adam Abubakari
+              </h4>
+              <p className="text-litbot-slate/80 text-sm mb-3">
+                Co-founder & Front-End Developer
+              </p>
+              <p className="text-litbot-slate text-sm leading-relaxed">
+                Leads the design and development of LitBot’s user interface. Creating elegant, 
+                intuitive, and accessible experiences for researchers. He ensures every 
+                interaction with LitBot is smooth, thoughtful, and beautifully crafted.
               </p>
             </div>
           </div>

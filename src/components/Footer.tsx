@@ -2,6 +2,7 @@ import { Mail, Linkedin } from "lucide-react";
 import Logo from "@/assets/images/logo.png";
 import Sully from "@/assets/images/team/sully.jpg";
 import Mutti from "@/assets/images/team/mutti.jpeg";
+import Addy from "@/assets/images/team/addy.jpg";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -124,6 +125,17 @@ const Footer = () => {
                   src={Mutti}
                   alt="Dr. Mustafa Al Khafaji"
                   className="w-9 h-9 rounded-full border-2 border-litbot-background hover:scale-105 transition-transform"
+                />
+              </a>
+              <a
+                  href="https://www.linkedin.com/in/adamabu/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+              >
+                <img
+                    src={Addy}
+                    alt="Mr. Adam Abubakari"
+                    className="w-9 h-9 rounded-full border-2 border-litbot-background hover:scale-105 transition-transform"
                 />
               </a>
             </div>
