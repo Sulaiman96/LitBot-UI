@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import MainNavigationBar from "@/components/MainNavigationBar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import FeatureSection from "@/components/FeatureSection";
@@ -31,7 +32,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
-      <Navbar />
+      <MainNavigationBar />
+
       <HeroSection />
       <AboutSection />
       <FeatureSection />
