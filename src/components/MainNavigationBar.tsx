@@ -27,6 +27,7 @@ const MainNavigationBar = () => {
   };
 
   return (
+    <div className="py-12 bg-outer-space">
     <nav
       className="w-full px-4 md:px-8 py-8 flex items-center justify-between bg-outer-space text-bone-dark font-nunito fixed top-0 left-0 z-50"
     >
@@ -79,6 +80,8 @@ const MainNavigationBar = () => {
 
       {/* Mobile Menu (optional, not implemented here) */}
     </nav>
+
+    </div>
   );
 };
 

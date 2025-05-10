@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Navbar from "@/components/Navbar";
 import MainNavigationBar from "@/components/MainNavigationBar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";

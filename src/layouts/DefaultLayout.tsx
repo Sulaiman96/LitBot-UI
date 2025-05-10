@@ -1,13 +1,17 @@
-import type { PropsWithChildren } from "react";
 import Footer from "@/components/Footer"
 import MainNavigationBar from "@/components/MainNavigationBar"
+import { Outlet } from "react-router";
 
-const DefaultLayout = ({ children }: PropsWithChildren) => {
+const DefaultLayout = () => {
     return (
         <div className="default-layout">
             <MainNavigationBar />
-            {children}
+            <main>
+            <Outlet />
+            </main>
             <Footer />
         </div>
     )
 }
+
+export default DefaultLayout;
