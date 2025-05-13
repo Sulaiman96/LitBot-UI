@@ -2,6 +2,10 @@ import { useState } from "react";
 import FileUploadZone from "./FileUploadZone";
 import UploadsTable from "./UploadsTable";
 
+type UploadPanelProps = {
+  onContinue?: () => void;
+};
+
 const dummyFiles = [
   { id: 1, title: "Measuring the Optical Concurrence of Vector Beams with an Atomic-State Interferometer" },
   { id: 2, title: "Measuring the Optical Concurrence of Vector Beams with an Atomic-State Interferometer" },
@@ -9,7 +13,7 @@ const dummyFiles = [
   // Add more for testing scroll
 ];
 
-const UploadPanel = () => {
+const UploadPanel = ({ onContinue }: UploadPanelProps) => {
   const [files] = useState(dummyFiles);
 
   return (
@@ -20,7 +24,12 @@ const UploadPanel = () => {
       <FileUploadZone />
       <UploadsTable files={files} />
       <div className="flex justify-end w-full mt-4">
-        <button className="bg-gray-200 text-gray-700 px-5 py-2 rounded font-semibold hover:bg-gray-300 transition">Continue &rarr;</button>
+        <button
+          className="bg-gray-200 text-gray-700 px-5 py-2 rounded font-semibold hover:bg-gray-300 transition"
+          onClick={onContinue}
+        >
+          Continue &rarr;
+        </button>
       </div>
     </div>
   );

@@ -1,23 +1,25 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 type WindowSwitcherProps = {
   activeTab: 'chat' | 'source';
   setActiveTab: (tab: 'chat' | 'source') => void;
 };
 
 const WindowSwitcher = ({ activeTab, setActiveTab }: WindowSwitcherProps) => (
-  <div className="flex space-x-2 mb-3">
-    <button
-      className={`px-4 py-1 rounded-t font-semibold text-sm transition border-b-2 ${activeTab === 'chat' ? 'border-bone-dark bg-white' : 'border-transparent bg-bone-light text-gray-500'}`}
-      onClick={() => setActiveTab('chat')}
-    >
-      Chat
-    </button>
-    <button
-      className={`px-4 py-1 rounded-t font-semibold text-sm transition border-b-2 ${activeTab === 'source' ? 'border-bone-dark bg-white' : 'border-transparent bg-bone-light text-gray-500'}`}
-      onClick={() => setActiveTab('source')}
-    >
-      Source
-    </button>
-  </div>
+  <Tabs defaultValue="chat" className="p-.5 w-fit mb-2 rounded-lg bg-bone-light" onValueChange={(value: 'chat' | 'source') => setActiveTab(value)}>
+    <TabsList className="bg-transparent">
+      <TabsTrigger value="chat" 
+        className={`px-10 ${activeTab === 'chat' ? 'bg-white text-neutral-darkest' : 'text-neutral-dark'}`}
+          >
+          Chat
+      </TabsTrigger>
+      <TabsTrigger value="source"
+      className={`px-10 ${activeTab === 'source' ? 'bg-white text-neutral-darkest' : 'text-neutral-dark'}`}
+      >
+        Source
+      </TabsTrigger>
+    </TabsList>
+  </Tabs>
 );
 
 export default WindowSwitcher;
