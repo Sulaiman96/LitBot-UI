@@ -6,7 +6,7 @@ type WindowSwitcherProps = {
 };
 
 const WindowSwitcher = ({ activeTab, setActiveTab }: WindowSwitcherProps) => (
-  <Tabs defaultValue="chat" className="p-.5 w-fit mb-2 rounded-lg bg-bone-light" onValueChange={(value: 'chat' | 'source') => setActiveTab(value)}>
+  <Tabs defaultValue="chat" className="p-.5 w-fit mb-2 rounded-lg row-1 bg-bone-light" onValueChange={(value: 'chat' | 'source') => setActiveTab(value)}>
     <TabsList className="bg-transparent">
       <TabsTrigger value="chat" 
         className={`px-10 ${activeTab === 'chat' ? 'bg-white text-neutral-darkest' : 'text-neutral-dark'}`}

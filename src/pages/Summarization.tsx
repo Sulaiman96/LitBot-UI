@@ -17,14 +17,13 @@ const Summarization = () => {
             {step === 1 ? (
                 <UploadPanel onContinue={() => setStep(2)} />
             ) : (
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    <div className="flex flex-col">
-                        <WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
-                        <div className="h-[32rem]">
-                            {activeTab === 'chat' ? <SummaryChat /> : <FileSourceWindow />}
-                        </div>
+                <div className="w-full grid grid-cols-2 auto-rows-min grid-rows-2 md:grid-cols-2 gap-8 items-start">
+                    <WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
+                    <div className="h-[32rem] col-1 row-2">
+                        {activeTab === 'chat' ? <SummaryChat /> : <FileSourceWindow />}
                     </div>
-                    <div className="h-[32rem]">
+                    <div className="text-neutral-darkest bg-bone-light row-1 px-10 col-2 py-.5rounded">Summary</div>
+                    <div className="h-[32rem col-2 row-2">
                         <SummarizationResult />
                     </div>
                 </div>

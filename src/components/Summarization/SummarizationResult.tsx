@@ -1,7 +1,7 @@
 const SummarizationResult = () => {
   return (
     <div className="relative h-full bg-bone-light rounded-xl  p-6 flex flex-col">
-      <div className="mb-2 font-semibold text-gray-700">Summary</div>
+      
       <div className="flex-1 overflow-y-auto p-4 text-sm text-neutral-darkest">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer justo leo, interdum nec neque id, lobortis rutrum mauris. Nullam suscipit molestie odio. Nunc blandit orci id turpis condimentum lobortis. Donec fringilla gravida risus in eleifend. Donec et velit suscipit, venenatis odio quis, finibus velit. Praesent et commodo libero. Pellentesque dictum dolor, efficitur ac rutrum lobortis, consequat quis velit. Nunc eu euismod risus, non luctus diam. Nunc pharetra tortor in ante ullamcorper, a scelerisque sem vehicula. Praesent ut molestie est. Phasellus malesuada ac nec erat dictum, a imperdiet turpis ullamcorper. Nam tincidunt ullamcorper sem, vel malesuada ipsum.
         <br /><br />
