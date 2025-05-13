@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer"
 import MainNavigationBar from "@/components/MainNavigationBar"
+import { Toaster } from "sonner"
 import { Outlet } from "react-router";
 
 const DefaultLayout = () => {
@@ -10,6 +11,7 @@ const DefaultLayout = () => {
             <Outlet />
             </main>
             <Footer />
+            <Toaster />
         </div>
     )
 }

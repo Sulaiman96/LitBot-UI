@@ -4,7 +4,7 @@ type SummarizationStepsProps = {
 
 const SummarizationSteps = ({ activeStep }: SummarizationStepsProps) => {
   return (
-    <div className="flex items-center justify-center space-x-6 mb-20">
+    <div className="flex items-center justify-center space-x-6 mb-10">
       <div className="flex flex-col items-center">
         <span className={`text-lg font-semibold rounded-full px-8 py-3 shadow font-nunito ${activeStep === 1 ? 'text-gray-800 bg-gray-200' : 'text-gray-400 bg-gray-100'}`}>UPLOAD</span>
       </div>
