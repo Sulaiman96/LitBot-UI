@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useCallback, useState} from "react";
 import FileUploadZone from "./FileUploadZone";
 import UploadsTable from "./UploadsTable";
 
@@ -14,15 +14,18 @@ const dummyFiles = [
 ];
 
 const UploadPanel = ({ onContinue }: UploadPanelProps) => {
-  const [files] = useState(dummyFiles);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const handleAcceptedFiles = useCallback((files: File[]) => {
+      setUploadedFiles( (previousFiles) => [...previousFiles, files]);
+  }, []);
 
   return (
     <div className="bg-bone-light rounded-2xl shadow-lg p-8 max-w-5xl mx-auto flex flex-col items-center border border-neutral-darkest">
       <p className="text-center text-gray-700 mb-6 font-nunito">
         Please upload papers for data extraction and summarization
       </p>
-      <FileUploadZone />
-      <UploadsTable files={files} />
+      <FileUploadZone onDropAccepted={handleAcceptedFiles}/>
+      <UploadsTable files={uploadedFiles} />
       <div className="flex justify-end w-full mt-4">
         <button
           className="bg-gray-200 text-gray-700 px-5 py-2 rounded font-semibold hover:bg-gray-300 transition"

@@ -35,14 +35,14 @@ const SummaryChat = () => {
           </div>
         </div>
       </div>
-      <Separator decorative />
-      <form className="flex items-center mt-auto relative py-10">
+      <Separator decorative className="bg-neutral-darkest opacity-20"/>
+      <form className="flex items-center mt-auto relative py-7">
         <Input
           type="text"
           placeholder="Ask about this summary..."
           className="flex-1 rounded-full px-3 py-3 border border-gray-300 focus:outline-none bg-neutral-lightest focus:ring-2 focus:ring-bone-dark text-sm"
         />
-        <Button type="submit" size="icon" className="bg-transparent absolute bottom-0 right-0 mb-10 rounded-full hover:bg-gray-400 transition">
+        <Button type="submit" size="icon" className="bg-transparent absolute bottom-0 right-0 mb-7 rounded-full hover:bg-gray-400 transition">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
             <path fill="black" d="M4 18.5v-13L19.423 12zM5 17l11.85-5L5 7v3.885L9.846 12L5 13.116zm0 0V7z"/>
           </svg>
