@@ -1,28 +1,49 @@
 import { useDropzone } from 'react-dropzone'
+import type { DropEvent, FileRejection } from 'react-dropzone';
 import { useCallback } from "react";
 import { toast } from 'sonner'
+import { supabase } from "@/lib/supabase";
 
-const FileUploadZone = () => {
-    const onDropAccepted = useCallback( files => {
-        files.forEach((file) => {
-            toast(`${file.path} has been uploaded`);
-        });
-        // Verify file types are accepted
-        // Notify user of upload via toast
-        // Upload files to backend server
-    }, []);
+type Props = {
+    onUpload: (value: string) => void
+}
 
-    const onDropRejected = useCallback( files => {
-        files.forEach((file) => {
-            toast(`${file.path} has failed to upload`);
+const FileUploadZone = ({ onDropAccepted }: { onDropAccepted: (files: File[]) => void }) => {
+    const handleDropAccepted = useCallback( async (acceptedFiles: File[], _event: DropEvent) => {
+        for (const file of acceptedFiles) {
+            const { data, error } = await supabase
+                .storage
+                .from('pdf-papers')
+                .upload(`${file.name}`, file, {
+                    cacheControl: '3600',
+                    upsert: false,
+                    contentType: 'application/pdf'
+                });
+
+            if (error) {
+                console.error(`Failed to upload ${file.name}: ${error.message}`);
+                if ( error.error === 'Duplicate') {
+                    toast(`Failed to upload ${file.name}. File name already exist please use a different name`);
+                }
+            } else {
+                toast(`${file.name} uploaded to Supabase!`);
+            }
+        }
+        onDropAccepted(acceptedFiles);
+    }, [onDropAccepted]);
+
+    const onDropRejected = useCallback((fileRejections: FileRejection[], _event: DropEvent) => {
+        fileRejections.forEach((rejection: FileRejection) => {
+            toast(`${rejection.file.name} has failed to upload`);
         });
     }, []);
 
     const { getRootProps, getInputProps } = useDropzone({
-        onDropAccepted,
+        onDropAccepted: handleDropAccepted,
         onDropRejected,
         accept: { 'application/pdf': [] },
-        maxFiles: 5
+        maxSize: 52428800,
+        maxFiles: 1
     });
   return (
     <div {...getRootProps({

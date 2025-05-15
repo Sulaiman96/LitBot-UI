@@ -1,10 +1,13 @@
-import React from "react";
+import { Fragment} from "react";
 
 type UploadsTableProps = {
-  files: { id: string | number; title: string }[];
+  files: { id: string | number; name: string }[];
+  selectedFile?: { id: string | number; name: string } | null;
+  onSelect?: (file: { id: string | number; name: string }) => void;
 };
 
-const UploadsTable = ({ files }: UploadsTableProps) => {
+const UploadsTable = ({ files, selectedFile, onSelect }: UploadsTableProps) => {
+
   return (
     <div className="w-full bg-white/80 rounded-xl shadow p-4">
       <div className="flex items-center justify-between mb-2">
@@ -20,16 +23,22 @@ const UploadsTable = ({ files }: UploadsTableProps) => {
           {/* Table header row (optional, can be left blank for checkboxes) */}
           {/* <div></div><div></div> */}
           {files.map((file) => (
-            <React.Fragment key={file.id}>
+            <Fragment key={file.id}>
               <div className="flex items-center justify-center py-2">
-                <input type="checkbox" />
+                <input
+                  type="radio"
+                  name="uploads-table-select"
+                  checked={selectedFile.id === file.id}
+                  onChange={() => onSelect && onSelect(file)}
+                  aria-label={`Select ${file.name}`}
+                />
               </div>
-              <div className="flex items-center py-2">
+              <div className="flex items-center py-2 cursor-pointer" onClick={() => onSelect && onSelect(file)}>
                 <span className="truncate text-gray-700 text-sm">
-                  {file.title}
+                  {file.name}
                 </span>
               </div>
-            </React.Fragment>
+            </Fragment>
           ))}
         </div>
       </div>

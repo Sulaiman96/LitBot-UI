@@ -1,24 +1,44 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
-const ForgotPassword = () => {
+type Props = {
+  onSwitch: (view: 'login' | 'register' | 'forgot') => void;
+};
+
+const ForgotPassword: React.FC<Props> = ({ onSwitch }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const validate = () => {
+    if (!email) return "Email is required.";
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return "Invalid email format.";
+    return null;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const err = validate();
+    if (err) {
+      setError(err);
+    } else {
+      setError(null);
+      setSubmitted(true);
+      // handle forgot password logic here
+    }
+  };
 
   return (
-    <div className="bg-bone-light rounded-xl shadow-md p-8 w-full max-w-md mx-auto flex flex-col items-center">
+    <div className="bg-bone-light rounded-xl p-8 pt-0 w-full mx-auto flex flex-col items-center">
       <h2 className="font-taviraj text-3xl mb-6">Forgot Password</h2>
       {!submitted ? (
-        <form
-          className="w-full space-y-4 font-nunito"
-          onSubmit={e => {
-            e.preventDefault();
-            setSubmitted(true);
-          }}
-        >
+        <form className="w-full space-y-4 font-nunito" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">Email</label>
-            <input id="email" type="email" className="w-full px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-bone-dark" placeholder="Enter your email" />
+            <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full px-3 py-2 bg-neutral-lightest rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-bone-dark" placeholder="Enter your email" />
+            {error && <div className="text-xs text-red-500 mt-1">{error}</div>}
           </div>
-          <button type="submit" className="w-full bg-bone-dark text-outer-space font-semibold py-2 rounded mt-2">Send Password</button>
+          <button type="submit" className="w-full  text-neutral-lightest bg-neutral-darkest font-semibold py-2 rounded mt-2">Send Password</button>
         </form>
       ) : (
         <div className="w-full mb-4 font-nunito text-center bg-white/70 rounded p-4 text-sm text-gray-700">
@@ -26,7 +46,9 @@ const ForgotPassword = () => {
         </div>
       )}
       <div className="mt-4 w-full text-center font-nunito text-sm">
-        <a href="#" className="text-bone-dark hover:underline">Log in or Sign up</a>
+        <button type="button" onClick={() => onSwitch('login')} className="text-sky-800 underline bg-transparent p-0">Log in</button>
+        <span> or </span>
+        <button type="button" onClick={() => onSwitch('register')} className="text-sky-800 underline bg-transparent p-0">Sign up</button>
       </div>
       <div className="mt-4 w-full flex flex-col items-center">
         <span className="text-xs text-gray-500 mb-2">Login with social accounts</span>

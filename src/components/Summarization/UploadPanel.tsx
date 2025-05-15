@@ -1,38 +1,82 @@
-import {useCallback, useState} from "react";
+import {useCallback, useState, useEffect} from "react";
 import FileUploadZone from "./FileUploadZone";
 import UploadsTable from "./UploadsTable";
+import {supabase} from "@/lib/supabase";
+import { Button } from "@/components/ui/button"
 
 type UploadPanelProps = {
-  onContinue?: () => void;
+  onContinue?: (file: { id: string; name: string }) => void;
 };
 
-const dummyFiles = [
-  { id: 1, title: "Measuring the Optical Concurrence of Vector Beams with an Atomic-State Interferometer" },
-  { id: 2, title: "Measuring the Optical Concurrence of Vector Beams with an Atomic-State Interferometer" },
-  { id: 3, title: "Measuring the Optical Concurrence of Vector Beams with an Atomic-State Interferometer" },
-  // Add more for testing scroll
-];
-
 const UploadPanel = ({ onContinue }: UploadPanelProps) => {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  // Store uploaded files as { id, name }
+  const [uploadedFiles, setUploadedFiles] = useState<{ id: string; name: string }[]>([]);
+  const [selectedFile, setSelectedFile] = useState<{ id: string | number; name: string } | null>(null);
+
+  // Accepts File[] and adds them to uploadedFiles
   const handleAcceptedFiles = useCallback((files: File[]) => {
-      setUploadedFiles( (previousFiles) => [...previousFiles, files]);
+    setUploadedFiles((previousFiles) => [
+      ...previousFiles,
+      ...files.map((file) => ({ id: file.name + '-' + file.lastModified, name: file.name }))
+    ]);
   }, []);
 
+    //Retrieve the previously uploaded files from Supasbase on component load
+    useEffect( () => {
+        const fetchFiles = async () => {
+            const { data, error } = await supabase
+                .storage
+                .from('pdf-papers')
+                .list('', {
+                    limit: 20,
+                    offset: 0,
+                    sortBy: { column: 'name', order: 'asc' },
+                });
+
+            if (error) {
+                // TODO: ERROR LOGGING
+                console.error('first', error)
+            } else {
+                // Validate the files exist in the list
+                // Later we will need to validate the files exist against the users
+                const validFiles = data
+                    .filter(file => file?.metadata?.mimetype === 'application/pdf' && file.id)
+                    .map(file => ({ id: file.id, name: file.name }));
+
+                setUploadedFiles((previousFiles) => {
+                    const existingIds = new Set(previousFiles.map(file => file.id));
+                    const newUniqueFiles = validFiles.filter(file => !existingIds.has(file.id));
+
+                    return [...previousFiles, ...newUniqueFiles];
+                });
+
+            }
+        }
+        fetchFiles();
+    }, []);
+
+  // Only enable continue if a file is selected
+  const canContinue = selectedFile !== null;
+
+  //  TODO: Automatically progress to next step when the user uploads a file
+    const continueStep = () => {
+
+    }
   return (
     <div className="bg-bone-light rounded-2xl shadow-lg p-8 max-w-5xl mx-auto flex flex-col items-center border border-neutral-darkest">
       <p className="text-center text-gray-700 mb-6 font-nunito">
         Please upload papers for data extraction and summarization
       </p>
-      <FileUploadZone onDropAccepted={handleAcceptedFiles}/>
-      <UploadsTable files={uploadedFiles} />
+      <FileUploadZone onDropAccepted={handleAcceptedFiles} onUpload={continueStep}/>
+      <UploadsTable files={uploadedFiles} selectedFile={selectedFile} onSelect={setSelectedFile} />
       <div className="flex justify-end w-full mt-4">
-        <button
-          className="bg-gray-200 text-gray-700 px-5 py-2 rounded font-semibold hover:bg-gray-300 transition"
+        <Button
+          className="bg-gray-200 text-gray-700 px-5 py-2 rounded font-semibold hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={onContinue}
+          disabled={!canContinue}
         >
           Continue &rarr;
-        </button>
+        </Button>
       </div>
     </div>
   );
