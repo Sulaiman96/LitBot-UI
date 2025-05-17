@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
+import {toast} from "sonner";
 
 type Props = {
   onSwitch: (view: 'login' | 'register' | 'forgot') => void;
@@ -18,6 +19,10 @@ const Register: React.FC<Props> = ({ onSwitch }) => {
     password?: string;
     confirmPassword?: string;
   }>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [registrationSent, setRegistrationSent] = useState(false);
+
+  const registerURL = `${import.meta.env.VITE_DEV_BACKEND_URL}/auth/register`
 
   const validate = () => {
     const errs: typeof errors = {};
@@ -42,10 +47,35 @@ const Register: React.FC<Props> = ({ onSwitch }) => {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      // handle register logic here
+      // Handle register logic here by sending the form data to the server
+      const userCreateModel = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password
+      }
+
+      try {
+        const response = await fetch(registerURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userCreateModel),
+        });
+
+        if (response.ok) {
+          toast('User registered successfully! Check your email for verification.');
+        } else {
+          toast('Registration failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error registering user:', error);
+        toast('An error occurred during registration. Please try again.');
+      }
     }
   };
 
@@ -84,7 +114,13 @@ const Register: React.FC<Props> = ({ onSwitch }) => {
       </form>
       <div className="mt-4 w-full text-center font-nunito text-sm">
         <span>Already have an account? </span>
-        <button type="button" onClick={() => onSwitch('login')} className="text-sky-800 underline bg-transparent p-0">Log in</button>
+        {!registrationSent ? (
+            <button type="button" onClick={() => onSwitch('login')} className="text-sky-800 underline bg-transparent p-0">Log in</button>
+        ) : (
+            <div className="w-full mb-4 font-nunito text-center bg-white/70 rounded p-4 text-sm text-gray-700">
+              Check your inbox for a registration email. If you don't see it, check your spam folder or try again with a different email.
+            </div>
+        )}
       </div>
       <div className="mt-4 w-full flex flex-col items-center">
         <span className="text-xs text-gray-500 mb-2">Login with social accounts</span>

@@ -4,12 +4,12 @@ import { useCallback } from "react";
 import { toast } from 'sonner'
 import { supabase } from "@/lib/supabase";
 
-type Props = {
-    onUpload: (value: string) => void
+type FileUploadZoneProps = {
+    onDropAccepted: (files: File[]) => void
 }
 
-const FileUploadZone = ({ onDropAccepted }: { onDropAccepted: (files: File[]) => void }) => {
-    const handleDropAccepted = useCallback( async (acceptedFiles: File[], _event: DropEvent) => {
+const FileUploadZone = ({ onDropAccepted }: FileUploadZoneProps) => {
+    const handleDropAccepted = useCallback( async (acceptedFiles: File[]) => {
         for (const file of acceptedFiles) {
             const { data, error } = await supabase
                 .storage
@@ -26,13 +26,13 @@ const FileUploadZone = ({ onDropAccepted }: { onDropAccepted: (files: File[]) =>
                     toast(`Failed to upload ${file.name}. File name already exist please use a different name`);
                 }
             } else {
-                toast(`${file.name} uploaded to Supabase!`);
+                toast(`${file.name} uploadeded successfully!`);
             }
         }
         onDropAccepted(acceptedFiles);
     }, [onDropAccepted]);
 
-    const onDropRejected = useCallback((fileRejections: FileRejection[], _event: DropEvent) => {
+    const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
         fileRejections.forEach((rejection: FileRejection) => {
             toast(`${rejection.file.name} has failed to upload`);
         });

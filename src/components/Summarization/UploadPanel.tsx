@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button"
 
 type UploadPanelProps = {
   onContinue?: (file: { id: string; name: string }) => void;
+  onUpload?: (file: { id: string; name: string }) => void;
 };
 
-const UploadPanel = ({ onContinue }: UploadPanelProps) => {
+const UploadPanel = ({ onContinue, onUpload }: UploadPanelProps) => {
   // Store uploaded files as { id, name }
   const [uploadedFiles, setUploadedFiles] = useState<{ id: string; name: string }[]>([]);
   const [selectedFile, setSelectedFile] = useState<{ id: string | number; name: string } | null>(null);
@@ -19,6 +20,10 @@ const UploadPanel = ({ onContinue }: UploadPanelProps) => {
       ...previousFiles,
       ...files.map((file) => ({ id: file.name + '-' + file.lastModified, name: file.name }))
     ]);
+
+    // Make a request to Supabase to get a signed URL for the file in order to send that to the backend for it to start processing a summary on the file
+
+    // Send the signed URL to the backend
   }, []);
 
     //Retrieve the previously uploaded files from Supasbase on component load
@@ -58,16 +63,12 @@ const UploadPanel = ({ onContinue }: UploadPanelProps) => {
   // Only enable continue if a file is selected
   const canContinue = selectedFile !== null;
 
-  //  TODO: Automatically progress to next step when the user uploads a file
-    const continueStep = () => {
-
-    }
   return (
     <div className="bg-bone-light rounded-2xl shadow-lg p-8 max-w-5xl mx-auto flex flex-col items-center border border-neutral-darkest">
       <p className="text-center text-gray-700 mb-6 font-nunito">
         Please upload papers for data extraction and summarization
       </p>
-      <FileUploadZone onDropAccepted={handleAcceptedFiles} onUpload={continueStep}/>
+      <FileUploadZone onDropAccepted={handleAcceptedFiles}/>
       <UploadsTable files={uploadedFiles} selectedFile={selectedFile} onSelect={setSelectedFile} />
       <div className="flex justify-end w-full mt-4">
         <Button

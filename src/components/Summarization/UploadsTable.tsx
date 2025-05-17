@@ -20,15 +20,13 @@ const UploadsTable = ({ files, selectedFile, onSelect }: UploadsTableProps) => {
       </div>
       <div className="border-t border-b border-gray-200 max-h-56 overflow-y-auto">
         <div className="grid grid-cols-[40px_1fr]">
-          {/* Table header row (optional, can be left blank for checkboxes) */}
-          {/* <div></div><div></div> */}
           {files.map((file) => (
             <Fragment key={file.id}>
               <div className="flex items-center justify-center py-2">
                 <input
                   type="radio"
                   name="uploads-table-select"
-                  checked={selectedFile.id === file.id}
+                  checked={selectedFile?.id === file.id}
                   onChange={() => onSelect && onSelect(file)}
                   aria-label={`Select ${file.name}`}
                 />
