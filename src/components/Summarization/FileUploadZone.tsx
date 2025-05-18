@@ -1,11 +1,11 @@
 import { useDropzone } from 'react-dropzone'
-import type { DropEvent, FileRejection } from 'react-dropzone';
+import type { FileRejection } from 'react-dropzone';
 import { useCallback } from "react";
 import { toast } from 'sonner'
 import { supabase } from "@/lib/supabase";
 
 type FileUploadZoneProps = {
-    onDropAccepted: (files: File[]) => void
+    onDropAccepted: (filePath: string) => void
 }
 
 const FileUploadZone = ({ onDropAccepted }: FileUploadZoneProps) => {
@@ -22,14 +22,15 @@ const FileUploadZone = ({ onDropAccepted }: FileUploadZoneProps) => {
 
             if (error) {
                 console.error(`Failed to upload ${file.name}: ${error.message}`);
-                if ( error.error === 'Duplicate') {
+                if ( error.name === 'Duplicate') {
                     toast(`Failed to upload ${file.name}. File name already exist please use a different name`);
                 }
             } else {
+                onDropAccepted(data.path);
+                // take the path from the response and pass it up for creating the signed URL
                 toast(`${file.name} uploadeded successfully!`);
             }
         }
-        onDropAccepted(acceptedFiles);
     }, [onDropAccepted]);
 
     const onDropRejected = useCallback((fileRejections: FileRejection[]) => {

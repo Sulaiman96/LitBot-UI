@@ -1,12 +1,13 @@
 import { Fragment} from "react";
 
 type UploadsTableProps = {
-  files: { id: string | number; name: string }[];
-  selectedFile?: { id: string | number; name: string } | null;
-  onSelect?: (file: { id: string | number; name: string }) => void;
+  files: { id: string; name: string }[];
+  selectedFile?: { id: string; name: string } | null;
+  onSelect?: (file: { id: string; name: string }) => void;
 };
 
 const UploadsTable = ({ files, selectedFile, onSelect }: UploadsTableProps) => {
+  const handleSelect = (file: { id: string; name: string }) => onSelect && onSelect(file)
 
   return (
     <div className="w-full bg-white/80 rounded-xl shadow p-4">
@@ -27,7 +28,7 @@ const UploadsTable = ({ files, selectedFile, onSelect }: UploadsTableProps) => {
                   type="radio"
                   name="uploads-table-select"
                   checked={selectedFile?.id === file.id}
-                  onChange={() => onSelect && onSelect(file)}
+                  onChange={() => handleSelect(file)}
                   aria-label={`Select ${file.name}`}
                 />
               </div>
