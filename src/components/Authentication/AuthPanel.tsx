@@ -1,16 +1,18 @@
-import { useState } from "react";
 import Login from "./Login";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 
-const AuthPanel = () => {
-    const [view, setView] = useState<'login' | 'register' | 'forgot'>("login");
+interface AuthPanelProps {
+  currentView: 'login' | 'register' | 'forgot';
+  onSwitchView: (view: 'login' | 'register' | 'forgot') => void;
+}
 
+const AuthPanel: React.FC<AuthPanelProps> = ({ currentView, onSwitchView }) => {
     return (
         <div className="auth-panel-component m-auto shadow-md w-3xl rounded-lg bg-bone-light pt-14 pb-8 my-12">
-            {view === "login" && <Login onSwitch={setView} />}
-            {view === "register" && <Register onSwitch={setView} />}
-            {view === "forgot" && <ForgotPassword onSwitch={setView} />}
+            {currentView === "login" && <Login onSwitch={onSwitchView} />}
+            {currentView === "register" && <Register onSwitch={onSwitchView} />}
+            {currentView === "forgot" && <ForgotPassword onSwitch={onSwitchView} />}
         </div>
     );
 }
