@@ -32,7 +32,7 @@ const MainNavigationBar = () => {
 	return (
 		<div className={'main-naviagtion'}>
 			<div className="py-12 bg-outer-space"></div>
-			<nav className="w-full px-4 md:px-8 py-8 flex items-center justify-between bg-outer-space text-bone-dark font-nunito fixed top-0 left-0 z-50">
+			<nav className="w-full px-4 md:px-8 flex items-center justify-between bg-outer-space text-bone-dark font-nunito fixed top-0 left-0 z-50">
 				<div className="logo flex items-center space-x-2">
 					<img src={logo} alt="LitBot Logo" className="h-8 w-8"/>
 					<span

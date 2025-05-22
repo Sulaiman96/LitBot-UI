@@ -80,18 +80,18 @@ const Login: React.FC<Props> = ({onSwitch}) => {
 				</div>
 				<div className="flex items-center justify-between">
 					<button type="button" onClick={() => onSwitch('forgot')}
-					        className="text-xs text-sky-800 underline bg-transparent p-0">Forgot password?
+					        className="text-xs cursor-pointer text-sky-800 underline bg-transparent p-0">Forgot password?
 					</button>
 				</div>
 				<button type="submit"
-				        className="w-full bg-neutral-darkest text-neutral-lightest font-semibold py-2 rounded mt-2">Sign
+				        className="w-full cursor-pointer bg-neutral-darkest text-neutral-lightest font-semibold py-2 rounded mt-2">Sign
 					in
 				</button>
 			</form>
 			<div className="mt-4 w-full text-center font-nunito text-sm">
 				<span>Don't have an account? </span>
 				<button type="button" onClick={() => onSwitch('register')}
-				        className="text-sky-800 underline bg-transparent p-0">Sign up
+				        className="text-sky-800 cursor-pointer underline bg-transparent p-0">Sign up
 				</button>
 			</div>
 			<div className="mt-4 w-full flex flex-col items-center">
