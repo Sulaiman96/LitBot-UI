@@ -11,13 +11,16 @@ type requestMethods = 'GET' | 'POST' | 'PUT' | 'DELETE';
  * Method for making request to backend that requires the user to be authenticated
  * @param protectedUrl
  * @param requestMethod
+ * @param headers
+ * @param data
  */
-const makeProtectedRequest = async (protectedUrl: string, requestMethod: requestMethods) => {
+const makeProtectedRequest = async (protectedUrl: string, requestMethod: requestMethods, headers?: Record<string, string>, data?: any) => {
   try {
     const response = await fetch(protectedUrl, {
       method: requestMethod,
       credentials: 'include',
-      // body: JSON.stringify(data) TODO: IF BODY IS ADDED
+      headers,
+    ...( data ? {body: JSON.stringify(data)} : '')
     });
 
     if (response.status === 403) {
