@@ -19,7 +19,7 @@ const makeProtectedRequest = async (protectedUrl: string, requestMethod: request
     const response = await fetch(protectedUrl, {
       method: requestMethod,
       credentials: 'include',
-      headers,
+      ...headers,
     ...( data ? {body: JSON.stringify(data)} : '')
     });
 

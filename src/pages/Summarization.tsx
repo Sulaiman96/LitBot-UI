@@ -1,85 +1,119 @@
-import {useState} from "react";
+import { useState } from "react";
 import SummarizationSteps from "@/components/Summarization/SummarizationSteps";
 import UploadPanel from "@/components/Summarization/UploadPanel";
 import WindowSwitcher from "@/components/Summarization/WindowSwitcher";
 import SummaryChat from "@/components/Summarization/SummaryChat";
 import FileSourceWindow from "@/components/Summarization/FileSourceWindow";
 import SummarizationResult from "@/components/Summarization/SummarizationResult";
-import {supabase} from "@/lib/supabase.ts";
-import {toast} from "sonner";
-import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
+import { supabase } from "@/lib/supabase.ts";
+import { toast } from "sonner";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
+import makeProtectedRequest from "@/lib/utils.ts"; // Ensure this path is correct
 
-type bucketFilePath = string;
+type BucketFilePath = string;
+type UploadedFile = { id: string; name: string };
 
 const Summarization = () => {
 	const [step, setStep] = useState(1); // 1 = upload, 2 = summary
 	const [activeTab, setActiveTab] = useState<'chat' | 'source'>('source');
-	const [signedUrl, setsignedUrl] = useState<string | null>(null);
+	const [signedUrl, setSignedUrl] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
+	const [summaryText, setSummaryText] = useState<string | null>(null);
+	const [currentSummaryId, setCurrentSummaryId] = useState<string | null>(null);
+	const [currentFile, setCurrentFile] = useState<UploadedFile | BucketFilePath | null>(null);
+
 	const summaryUrl = `${import.meta.env.VITE_DEV_BACKEND_URL}/summarise/summarise-file`;
 
-	/**
-	 * In one case the user uploads a file, in another case the file is already uploaded
-	 * If the file is already uploaded to supabase, and we need it on the frontend, we need to get the signed url and pass it to both the backend and our fileSourceWindow
-	 * If the file has just been uploaded to our frontend, we only need to get the signed url and can keep the file in local state
-	 * @param file
-	 */
-	const requestFile = async (file: { id: string; name: string } | bucketFilePath) => {
+	const fetchSummaryForFile = async (file: UploadedFile | BucketFilePath) => {
 		setIsLoading(true);
-		const {data, error} = await supabase
-			.storage
-			.from('pdf-papers')
-			.createSignedUrl(typeof file === 'string' ? file : file.name, 60);
+		setSummaryText(null); // Clear previous summary
+		setCurrentSummaryId(null); // Clear previous summary ID
+		setCurrentFile(file); // Store the current file for refresh
 
-		if (error) {
-			console.error(error.message)
-		} else {
+		const filePath = typeof file === 'string' ? file : file.name;
+
+		const { data: signedUrlData, error: signedUrlError } = await supabase
+			.storage
+			.from('pdf-papers') // Ensure this is your correct bucket name
+			.createSignedUrl(filePath, 60 * 5); // Signed URL valid for 5 minutes
+
+		if (signedUrlError) {
+			console.error("Error creating signed URL:", signedUrlError.message);
+			toast.error('Failed to prepare file for summarization. Please try again.');
+			setIsLoading(false);
+			return;
+		}
+
+		if (signedUrlData) {
+			setSignedUrl(signedUrlData.signedUrl);
 			try {
-				// Send the newly created signed URL to the backend and pass it to the fileSourceWindow component
-				setsignedUrl(data.signedUrl);
-				fetch(summaryUrl, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						'credentials': 'include'
-					},
-					body: JSON.stringify(data),
-				})
-					.then(() => {
-						setIsLoading(false);
-						setStep(step + 1);
-					});
+				const summaryResponse = await makeProtectedRequest(
+					summaryUrl,
+					'POST',
+					{ 'Content-Type': 'application/json' },
+					{ signedUrl: signedUrlData.signedUrl }
+				);
+
+				if (summaryResponse && summaryResponse.summary && summaryResponse.summaryId) {
+					setSummaryText(summaryResponse.summary);
+					setCurrentSummaryId(summaryResponse.summaryId);
+					setStep(2);
+					toast.success("Summary generated successfully!");
+				} else {
+					// Handle cases where response is not as expected
+					console.error('Invalid summary response:', summaryResponse);
+					toast.error('Failed to retrieve summary. The response was not in the expected format.');
+				}
 			} catch (error) {
 				console.error('Error retrieving summary:', error);
-				toast('An error occurred during generating the summary. Please try again.');
+				toast.error('An error occurred while generating the summary. Please try again.');
+			} finally {
+				setIsLoading(false);
 			}
 		}
-	}
+	};
+
+	const handleRefreshSummary = () => {
+		if (currentFile) {
+			toast.info("Refreshing summary...");
+			fetchSummaryForFile(currentFile);
+		} else {
+			toast.error("No file has been summarized yet to refresh.");
+			// Optionally, reset to step 1 or handle as appropriate
+			// setStep(1);
+		}
+	};
 
 	return (
 		<div className="summarization-page bg-neutral-lightest min-h-screen flex flex-col items-center py-8 px-20">
 			<h1 className="page-title font-taviraj text-3xl md:text-4xl mt-13 mb-10">AI Research Assistant</h1>
-			<SummarizationSteps activeStep={step}/>
+			<SummarizationSteps activeStep={step} />
 			{step === 1 ? (
-				<UploadPanel onContinue={requestFile} onUpload={requestFile}/>
+				<UploadPanel onContinue={fetchSummaryForFile} onUpload={fetchSummaryForFile} />
 			) : (
 				<div className="w-full grid grid-cols-2 grid-rows-[2rem_1fr] md:grid-cols-2 gap-y-2 gap-x-8 items-start">
-					<WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab}/>
+					<WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
 					<div className="h-[32rem] col-1 row-2">
 						<div className={`${activeTab === 'chat' ? 'hidden' : ''} h-full`}>
-							<FileSourceWindow fileURL={signedUrl}/>
+							<FileSourceWindow fileURL={signedUrl} />
 						</div>
 						<div className={`${activeTab === 'source' ? 'hidden' : ''} h-full`}>
-							<SummaryChat/>
+							<SummaryChat summaryId={currentSummaryId} /> {/* Consider if SummaryChat needs summaryId or other props */}
 						</div>
-
 					</div>
-					<Tabs defaultValue="source" className="p-.5 w-fit rounded-lg row-1 bg-bone-light">
+					<Tabs defaultValue="summary" className="p-.5 w-fit rounded-lg row-1 col-start-2 bg-bone-light">
 						<TabsList className="bg-transparent">
-							<TabsTrigger value="Summary" className={'px-10 bg-white text-neutral-darkest'}>Summary</TabsTrigger>
+							<TabsTrigger value="summary" className={'px-10 bg-white text-neutral-darkest'}>Summary</TabsTrigger>
 						</TabsList>
 					</Tabs>
-					<SummarizationResult/>
+					<div className="col-start-2 row-start-2 h-full"> {/* Ensure SummarizationResult is placed correctly */}
+						<SummarizationResult
+							summary={summaryText}
+							summaryId={currentSummaryId}
+							isLoading={isLoading}
+							onRefresh={handleRefreshSummary}
+						/>
+					</div>
 				</div>
 			)}
 		</div>

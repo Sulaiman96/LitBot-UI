@@ -9,7 +9,7 @@ type Props = {
   onSwitch: (view: 'login' | 'register' | 'forgot') => void;
 };
 
-const ForgotPassword: React.FC<Props> = ({ onSwitch }) => {
+const ForgotPassword = ({ onSwitch }: Props) => {
   const [searchParams] = useSearchParams();
 
   const [viewMode, setViewMode] = useState<'forgot' | 'reset'>('forgot');

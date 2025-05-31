@@ -9,7 +9,7 @@ type Props = {
   onSwitch: (view: 'login' | 'register' | 'forgot') => void;
 };
 
-const Register: React.FC<Props> = ({ onSwitch }) => {
+const Register = ({ onSwitch }: Props) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

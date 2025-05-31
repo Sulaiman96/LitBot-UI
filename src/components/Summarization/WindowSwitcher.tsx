@@ -9,13 +9,13 @@ type WindowSwitcherProps = {
 const WindowSwitcher = ({ activeTab, setActiveTab }: WindowSwitcherProps) => {
   const handleTabChange = ( value: tabOptions ) => {
     setActiveTab(value)
+    console.log(value)
   }
 
   return (
-    <Tabs defaultValue="source" className="p-.5 w-fit rounded-lg row-1 bg-bone-light" onValueChange={handleTabChange}>
+    <Tabs defaultValue="source" className="p-.5 w-fit rounded-lg row-1 bg-bone-light" onValueChange={(value: tabOptions) => handleTabChange(value)}>
       <TabsList className="bg-transparent">
         <TabsTrigger value="chat"
-          disabled
           className={`px-10 ${activeTab === 'chat' ? 'bg-white text-neutral-darkest' : 'text-neutral-dark'}`}
         >
           Chat

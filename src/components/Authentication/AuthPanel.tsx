@@ -7,7 +7,7 @@ interface AuthPanelProps {
   onSwitchView: (view: 'login' | 'register' | 'forgot') => void;
 }
 
-const AuthPanel: React.FC<AuthPanelProps> = ({ currentView, onSwitchView }) => {
+const AuthPanel = ({ currentView, onSwitchView }: AuthPanelProps) => {
     return (
         <div className="auth-panel-component m-auto shadow-md w-3xl rounded-lg bg-bone-light pt-14 pb-8 my-12">
             {currentView === "login" && <Login onSwitch={onSwitchView} />}

@@ -1,53 +1,97 @@
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Input } from "@/components/ui/input"
-const SummaryChat = () => {
+import React, { useState } from 'react';
+import type { ChatMessage as ChatMessageType } from '@/types/chat';
+import ChatMessageList from '@/components/Chat/ChatMessageList';
+import ChatInput from '@/components/Chat/ChatInput';
+import makeProtectedRequest from '@/lib/utils';
+import { toast } from 'sonner';
+import { v4 as uuidv4 } from 'uuid'; // For generating unique message IDs
+
+interface SummaryChatProps {
+  summaryId: string | null;
+}
+
+const SummaryChat = ({ summaryId }: SummaryChatProps) => {
+  const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoadingAiResponse, setIsLoadingAiResponse] = useState(false);
+
+  const chatApiUrl = `${import.meta.env.VITE_DEV_BACKEND_URL}/api/chat`; // Replace with your actual chat API endpoint
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim() === '' || isLoadingAiResponse) return;
+
+    const userMessage: ChatMessageType = {
+      id: uuidv4(),
+      text: inputValue,
+      sender: 'user',
+      timestamp: new Date(),
+    };
+
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setInputValue('');
+    setIsLoadingAiResponse(true);
+
+    try {
+      if (!summaryId) {
+        toast.error("Cannot send message: Summary ID is missing.");
+        setIsLoadingAiResponse(false);
+        // Optionally, add the user message back to input or handle differently
+        // setMessages(prev => prev.filter(msg => msg.id !== userMessage.id)); 
+        return;
+      }
+
+      const response = await makeProtectedRequest(
+        chatApiUrl,
+        'POST',
+        { 'Content-Type': 'application/json' },
+        { message: userMessage.text, summaryId: summaryId }
+      );
+
+      if (response && response.reply) {
+        const aiMessage: ChatMessageType = {
+          id: uuidv4(),
+          text: response.reply,
+          sender: 'ai',
+          timestamp: new Date(),
+        };
+        setMessages((prevMessages) => [...prevMessages, aiMessage]);
+      } else {
+        console.error('Invalid AI response:', response);
+        toast.error('Received an invalid response from the AI.');
+        // Optionally add a generic error message to chat
+        const errorAiMessage: ChatMessageType = {
+          id: uuidv4(),
+          text: "Sorry, I couldn't process that. Please try again.",
+          sender: 'ai',
+          timestamp: new Date(),
+        };
+        setMessages((prevMessages) => [...prevMessages, errorAiMessage]);
+      }
+    } catch (error) {
+      console.error('Error sending message or fetching AI response:', error);
+      toast.error('An error occurred while communicating with the AI.');
+      const errorAiMessage: ChatMessageType = {
+        id: uuidv4(),
+        text: "Sorry, I'm having trouble connecting. Please try again later.",
+        sender: 'ai',
+        timestamp: new Date(),
+      };
+      setMessages((prevMessages) => [...prevMessages, errorAiMessage]);
+    } finally {
+      setIsLoadingAiResponse(false);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-bone-light rounded-xl p-4">
-      <div className="flex-1 overflow-y-auto space-y-4 mb-3">
-        {/* AI message */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center font-bold text-gray-700">M</div>
-          <div>
-            <div className="bg-white rounded shadow px-3 py-2 text-sm max-w-xs mb-1">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-            </div>
-            <div className="text-xs text-gray-500">Guides how LitBot serves researchers by fine-tuning the model to academic niches and ensuring the results meet the quality, rigour and integrity researchers expect. Plays a key role in aligning the tool with the real needs of the research community.</div>
-          </div>
-        </div>
-        {/* User message */}
-        <div className="flex items-start space-x-2 flex-row-reverse">
-          <div className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center font-bold text-white">U</div>
-          <div>
-            <div className="bg-gray-100 rounded shadow px-3 py-2 text-sm max-w-xs mb-1">
-              Can you summarize the methodology?
-            </div>
-          </div>
-        </div>
-        {/* AI message */}
-        <div className="flex items-start space-x-2">
-          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center font-bold text-gray-700">M</div>
-          <div>
-            <div className="bg-white rounded shadow px-3 py-2 text-sm max-w-xs mb-1">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-            </div>
-            <div className="text-xs text-gray-500">Guides how LitBot serves researchers by fine-tuning the model to academic niches and ensuring the results meet the quality, rigour and integrity researchers expect. Plays a key role in aligning the tool with the real needs of the research community.</div>
-          </div>
-        </div>
-      </div>
-      <Separator decorative className="bg-neutral-darkest opacity-20"/>
-      <form className="flex items-center mt-auto relative py-7">
-        <Input
-          type="text"
-          placeholder="Ask about this summary..."
-          className="flex-1 rounded-full px-3 py-3 border border-gray-300 focus:outline-none bg-neutral-lightest focus:ring-2 focus:ring-bone-dark text-sm"
-        />
-        <Button type="submit" size="icon" className="bg-transparent absolute bottom-0 right-0 mb-7 rounded-full hover:bg-gray-400 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-            <path fill="black" d="M4 18.5v-13L19.423 12zM5 17l11.85-5L5 7v3.885L9.846 12L5 13.116zm0 0V7z"/>
-          </svg>
-        </Button>
-      </form>
+      <ChatMessageList messages={messages} isLoadingAiResponse={isLoadingAiResponse} />
+      <ChatInput
+        inputValue={inputValue}
+        onInputChange={setInputValue}
+        onSendMessage={handleSendMessage}
+        isLoading={isLoadingAiResponse}
+      />
     </div>
   );
 };

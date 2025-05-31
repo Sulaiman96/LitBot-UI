@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import  {useState} from 'react';
 import {
 	Dialog,
 	DialogContent,
@@ -21,14 +21,14 @@ interface FeedbackCommentDialogProps {
 	onFeedbackSent: (success: boolean) => void; // Callback for parent to handle UI updates
 }
 
-const FeedbackCommentDialog: React.FC<FeedbackCommentDialogProps> = (
+const FeedbackCommentDialog = (
 	{
 		isOpen,
 		onClose,
 		summaryId,
 		feedbackType,
 		onFeedbackSent,
-	}) => {
+	}: FeedbackCommentDialogProps) => {
 	const [comment, setComment] = useState('');
 	const [isSending, setIsSending] = useState(false);
 

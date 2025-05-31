@@ -7,7 +7,7 @@ type Props = {
 	onSwitch: (view: 'login' | 'register' | 'forgot') => void;
 };
 
-const Login: React.FC<Props> = ({onSwitch}) => {
+const Login = ({onSwitch}: Props) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
