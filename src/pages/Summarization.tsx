@@ -31,9 +31,6 @@ const Summarization = () => {
 			.from('pdf-papers')
 			.createSignedUrl(typeof file === 'string' ? file : file.name, 60);
 
-		// const summaryRequestModel = {
-		//     signedUrl: data.signedUrl
-		// }
 		if (error) {
 			console.error(error.message)
 		} else {

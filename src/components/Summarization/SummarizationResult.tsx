@@ -26,9 +26,12 @@ const SummarizationResult = ({summary, summaryId} : SummarizationResultProps) =>
   return (
     <div className="relative h-full bg-bone-light rounded-xl  p-6 flex flex-col">
       
-      <div id="summaryOutput" className="flex-1 overflow-y-auto p-4 text-sm mb-4 text-left place-contetext-neutral-darkest inset-shadow-sm inset-shadow-bone-darkest max-h-[32rem] overflow-y-auto">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path fill="currentColor" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>
-        { summary ? summary : 'No summary' }
+      <div id="summaryOutput" className={`${ summary ? '' :  'place-content-center'} grid place-content-center flex-1 p-4 text-sm mb-4 text-left text-neutral-darkest inset-shadow-sm inset-shadow-bone-darkest max-h-[32rem] overflow-y-auto`}>
+        { summary ?
+          summary
+          :
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path fill="currentColor" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"><animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>
+        }
       </div>
       <div className="flex space-x-2 justify-end content-center">
         <FeedbackButtons summaryId={summaryId}/>
