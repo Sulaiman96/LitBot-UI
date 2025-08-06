@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fetch:swagger": "node fetch-swagger.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.10",
@@ -41,6 +42,7 @@
     "@types/react-dom": "^19.1.2",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.4.1",
+    "dotenv": "^17.2.1",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",

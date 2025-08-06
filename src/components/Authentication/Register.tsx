@@ -59,8 +59,8 @@ const Register = ({ onSwitch }: Props) => {
     if (validate()) {
       setIsLoading(true);
       const userCreateModel = {
-        first_name: firstName,
-        last_name: lastName,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         password: password
       };
