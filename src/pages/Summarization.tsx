@@ -15,7 +15,7 @@ type UploadedFile = { id: string; name: string };
 
 const Summarization = () => {
 	const [step, setStep] = useState(1); // 1 = upload, 2 = summary
-	const [activeTab, setActiveTab] = useState<'chat' | 'source'>('source');
+	const [activeTab, setActiveTab] = useState<'chat' | 'source' | 'summary'>('source');
 	const [signedUrl, setSignedUrl] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(false);
 	const [summaryText, setSummaryText] = useState<string | null>(null);
@@ -85,36 +85,59 @@ const Summarization = () => {
 	};
 
 	return (
-		<div className="summarization-page bg-neutral-lightest min-h-screen flex flex-col items-center py-8 px-20">
+		<div className="summarization-page bg-neutral-lightest min-h-screen flex flex-col items-center py-8 px-2 md:px-20">
 			<h1 className="page-title font-taviraj text-3xl md:text-4xl mt-13 mb-10">AI Research Assistant</h1>
 			<SummarizationSteps activeStep={step} />
 			{step === 1 ? (
 				<UploadPanel onContinue={fetchSummaryForFile} onUpload={fetchSummaryForFile} />
 			) : (
-				<div className="w-full grid grid-cols-2 grid-rows-[2rem_1fr] md:grid-cols-2 gap-y-2 gap-x-8 items-start">
-					<WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
-					<div className="h-[32rem] col-1 row-2">
-						<div className={`${activeTab === 'chat' ? 'hidden' : ''} h-full`}>
-							<FileSourceWindow fileURL={signedUrl} />
+				<>
+					{/* Desktop layout (md+) */}
+					<div className="hidden md:grid w-full grid-cols-2 grid-rows-[2rem_1fr] gap-y-2 gap-x-8 items-start">
+						<WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
+						<div className="h-[32rem] col-1 row-2">
+							<div className={`${activeTab === 'chat' ? 'hidden' : ''} h-full`}>
+								<FileSourceWindow fileURL={signedUrl} />
+							</div>
+							<div className={`${activeTab === 'source' ? 'hidden' : ''} h-full`}>
+								<SummaryChat summaryId={currentSummaryId} />
+							</div>
 						</div>
-						<div className={`${activeTab === 'source' ? 'hidden' : ''} h-full`}>
-							<SummaryChat summaryId={currentSummaryId} /> {/* Consider if SummaryChat needs summaryId or other props */}
+						<Tabs defaultValue="summary" className="p-.5 w-fit rounded-lg row-1 col-start-2 bg-bone-light">
+							<TabsList className="bg-transparent">
+								<TabsTrigger value="summary" className={'px-10 bg-white text-neutral-darkest'}>Summary</TabsTrigger>
+							</TabsList>
+						</Tabs>
+						<div className="col-start-2 row-start-2 h-full">
+							<SummarizationResult
+								summary={summaryText}
+								summaryId={currentSummaryId}
+								isLoading={isLoading}
+								onRefresh={handleRefreshSummary}
+							/>
 						</div>
 					</div>
-					<Tabs defaultValue="summary" className="p-.5 w-fit rounded-lg row-1 col-start-2 bg-bone-light">
-						<TabsList className="bg-transparent">
-							<TabsTrigger value="summary" className={'px-10 bg-white text-neutral-darkest'}>Summary</TabsTrigger>
-						</TabsList>
-					</Tabs>
-					<div className="col-start-2 row-start-2 h-full"> {/* Ensure SummarizationResult is placed correctly */}
-						<SummarizationResult
-							summary={summaryText}
-							summaryId={currentSummaryId}
-							isLoading={isLoading}
-							onRefresh={handleRefreshSummary}
-						/>
+					{/* Mobile layout (<md) */}
+					<div className="block md:hidden w-full">
+						<WindowSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
+						<div className="mt-2">
+							{activeTab === 'chat' && (
+								<SummaryChat summaryId={currentSummaryId} />
+							)}
+							{activeTab === 'source' && (
+								<FileSourceWindow fileURL={signedUrl} />
+							)}
+							{activeTab === 'summary' && (
+								<SummarizationResult
+									summary={summaryText}
+									summaryId={currentSummaryId}
+									isLoading={isLoading}
+									onRefresh={handleRefreshSummary}
+								/>
+							)}
+						</div>
 					</div>
-				</div>
+				</>
 			)}
 		</div>
 	);
